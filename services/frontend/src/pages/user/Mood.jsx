@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { BarChart, Bar, Cell, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { SmilePlus, Save } from 'lucide-react';
 import Sidebar from '../../components/shared/Sidebar';
 import api from '../../lib/axios';
@@ -18,6 +18,7 @@ const Mood = () => {
   const [sleepHours, setSleepHours] = useState(7);
   const [journalNote, setJournalNote] = useState('');
   
+  const [todayMood, setTodayMood] = useState(null);
   const [weekData, setWeekData] = useState([]);
   const [monthData, setMonthData] = useState([]);
   const [activeTab, setActiveTab] = useState('week');
@@ -46,6 +47,7 @@ const Mood = () => {
         if (res.data.data) {
           const l = res.data.data;
           setHasLoggedToday(true);
+          setTodayMood(l);
           setMoodScore(l.moodScore);
           setEmotions(l.emotions || []);
           setActivities(l.activities || []);
@@ -264,7 +266,7 @@ const Mood = () => {
                     <Bar dataKey="moodScore" radius={[4, 4, 0, 0]}>
                       {
                         weekData.map((entry, index) => (
-                          <cell key={`cell-${index}`} fill={entry.moodScore === null ? '#E2E8F0' : 'var(--secondary)'} />
+                          <Cell key={`cell-${index}`} fill={entry.moodScore === null ? '#E2E8F0' : 'var(--secondary)'} />
                         ))
                       }
                     </Bar>
